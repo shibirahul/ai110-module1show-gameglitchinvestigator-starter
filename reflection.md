@@ -4,28 +4,57 @@ Answer each question in 3 to 5 sentences. Be specific and honest about what actu
 
 ## 1. What was broken when you started?
 
-When I first reviewed the game, it was clear that the app logic and the test setup did not agree with each other. The biggest bugs were that the hint messages were backwards, the app sometimes converted the secret number to a string before comparing it, and the helper functions in `logic_utils.py` were still unimplemented. I also noticed that starting a new game did not fully reset the session state, so the game could stay stuck in a won or lost state. The UI text was inconsistent too because it always said the range was 1 to 100 even when the difficulty setting changed the actual range.
+- What did the game look like the first time you ran it?  
+It looked like a simple guess the number game, but I was confused because the Developer Debug Info was visible in the UI even though the app claimed to be production-ready. At first I tried to solve it normally using a binary search strategy. After a few guesses, I realized the hints were not reliable. That made it clear that the game logic was broken.
+
+- List at least two concrete bugs you noticed at the start  
+  (for example: "the hints were backwards").  
+The first bug I noticed was that the attempts counter did not match the number of guesses I was actually getting. The second bug was that clicking New Game did not reset the game properly, so I often had to refresh the page. I also found the hints confusing because they sometimes pushed me in the wrong direction. The difficulty ranges also felt strange and were not clearly explained.
 
 ---
 
 ## 2. How did you use AI as a teammate?
 
-I used AI as a debugging and refactoring partner to inspect the whole codebase, identify likely bugs, and then apply targeted fixes across `app.py`, `logic_utils.py`, and the tests. One correct AI suggestion was to move the game logic into `logic_utils.py`, update `app.py` to import those functions, and add a regression test for the reversed high/low hint bug. I verified that suggestion by reviewing the diff, running `python3 -m py_compile`, running `pytest`, and launching the Streamlit app in headless mode to confirm it started successfully. One incorrect or misleading AI suggestion from the original starter code path was effectively the handling inside `parse_guess` that converted decimal strings like `7.9` into `7`, which looked permissive but actually hid bad user input. I verified that was misleading by reading the code path carefully and then adding a test to confirm decimal input should be rejected instead of silently truncated.
+- Which AI tools did you use on this project (for example: ChatGPT, Gemini, Copilot)?  
+I used Claude Sonnet 4.6 and ChatGPT 5.4 on this project. I mainly used them to inspect the code, explain bugs, and suggest fixes. They were helpful for quickly understanding the relationship between the Streamlit UI and the game logic.
+
+- Give one example of an AI suggestion that was correct (including what the AI suggested and how you verified the result).  
+One correct suggestion was to move the game logic functions into `logic_utils.py` and keep `app.py` focused on the Streamlit interface. That made the code easier to understand and test. I verified it by checking the updated files and then running `pytest` to make sure the logic still worked.
+
+- Give one example of an AI suggestion that was incorrect or misleading (including what the AI suggested and how you verified the result).  
+One misleading part of the original AI-generated code was how it handled decimal guesses. It converted something like `7.9` into `7` instead of rejecting it, which is not correct for this game. I verified that by reading the code carefully and then adding a test to check that decimal input should fail.
 
 ---
 
 ## 3. Debugging and testing your fixes
 
-I decided a bug was really fixed only when the code path was corrected, the tests matched the intended behavior, and the app still started without runtime errors. I added automated tests in `tests/test_game_logic.py`, including one that checks a high guess against a lower secret returns `"Too High"` with the message `"Go LOWER!"`, and another that confirms decimal guesses are rejected. After that I ran `.venv/bin/python -m pytest -q`, and all 5 tests passed. I also ran `.venv/bin/streamlit run app.py --server.headless true --server.port 8765` to verify the repaired app could boot successfully. AI was useful here because it helped identify where the function contract and tests disagreed, but I still had to verify each change by reading the code and running the checks myself.
+- How did you decide whether a bug was really fixed?  
+I only considered a bug fixed when both the code and the app behavior matched what I expected. If the code looked better but the app still behaved strangely, I kept debugging. I also used tests to confirm that the fixes were not just accidental.
+
+- Describe at least one test you ran (manual or using pytest)  
+  and what it showed you about your code.  
+One test I ran checked that when the guess is higher than the secret number, the result is `"Too High"` and the message says `"Go LOWER!"`. That showed me the high/low hint bug was actually fixed. I also tested decimal input to make sure invalid guesses were rejected properly.
+
+- Did AI help you design or understand any tests? How?  
+Yes, AI helped me think about what kind of tests would match the bugs I found. It was especially useful for suggesting a regression test for the reversed hint problem. I still had to review the test myself and make sure it matched the real behavior I wanted.
 
 ---
 
 ## 4. What did you learn about Streamlit and state?
 
-I learned that Streamlit reruns the script from top to bottom every time the user interacts with the page, so plain local variables are not enough for persistent game state. To keep values like the secret number, score, attempts, and status stable across button clicks, those values need to live in `st.session_state`. I also learned that state resets must be complete and intentional, because leaving one field behind, like `status`, can make the UI behave as if the app is still in the previous round. I would explain Streamlit state to a friend as "the script re-executes constantly, so session state is the notebook where you store anything you need to survive the next rerun."
+- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?  
+I learned that Streamlit reruns the whole script every time the user clicks a button or changes input. Because of that, normal variables do not reliably hold game data between actions. `st.session_state` stores values like the secret number, attempts, and score so they survive across reruns. I would explain it as the app refreshing its logic every click, while session state acts like its memory.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-One habit I want to reuse is writing or updating tests immediately after identifying a bug, because it turns a vague suspicion into a concrete behavior I can verify repeatedly. Next time I work with AI on a coding task, I would narrow each prompt even more so the AI focuses on one bug or one refactor at a time instead of blending multiple concerns together. This project changed the way I think about AI-generated code because it showed that AI can speed up debugging and refactoring, but the output still needs human review, clear tests, and runtime verification before it can be trusted. I now treat AI-generated code as a draft that may contain useful structure but still needs the same level of scrutiny as any other code.
+- What is one habit or strategy from this project that you want to reuse in future labs or projects?  
+  - This could be a testing habit, a prompting strategy, or a way you used Git.  
+One habit I want to reuse is writing a test as soon as I understand a bug. It makes debugging more focused and gives me proof that the fix works. I also want to keep asking AI smaller, more specific questions instead of one big vague prompt.
+
+- What is one thing you would do differently next time you work with AI on a coding task?  
+Next time, I would verify each AI suggestion earlier instead of assuming it was correct because it sounded confident. I would also compare the suggestion against the actual code behavior more carefully. That would save time and reduce confusion later.
+
+- In one or two sentences, describe how this project changed the way you think about AI generated code.  
+This project showed me that AI-generated code can be helpful, but it still needs careful review and testing. I now see AI as a useful assistant, not something I should trust without checking.
