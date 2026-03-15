@@ -34,8 +34,8 @@ def reset_game(low: int, high: int) -> None:
     st.session_state.score = 0
     st.session_state.status = "playing"
     st.session_state.history = []
-    st.session_state.guess_input = ""
     st.session_state.last_feedback = None
+    st.session_state.clear_guess_input = True
 
 
 def render_feedback_card(outcome: str, message: str, guess: int, secret: int) -> None:
@@ -91,7 +91,13 @@ st.sidebar.metric("Best score", st.session_state.best_score)
 st.sidebar.subheader("📜 Guess History")
 if st.session_state.history:
     st.sidebar.dataframe(
-        st.session_state.history,
+        [
+            {
+                "Guess": entry["Guess"],
+                "Outcome": entry["Outcome"],
+            }
+            for entry in st.session_state.history
+        ],
         width="stretch",
         hide_index=True,
     )
@@ -110,6 +116,12 @@ with hero_col:
 with status_col:
     st.metric("Attempts Used", st.session_state.attempts)
     st.metric("Current Score", st.session_state.score)
+
+if "guess_input" not in st.session_state:
+    st.session_state.guess_input = ""
+
+if st.session_state.pop("clear_guess_input", False):
+    st.session_state.guess_input = ""
 
 raw_guess = st.text_input(
     "Enter your guess:",
@@ -187,11 +199,6 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
-
-if st.session_state.history:
-    st.subheader("Session Summary")
-    # FIX: Added after AI-assisted feature planning to visualize guess distance per round.
-    st.dataframe(st.session_state.history, width="stretch", hide_index=True)
 
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
