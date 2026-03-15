@@ -76,7 +76,7 @@ I launched the app with Streamlit and confirmed that it started successfully, ac
 
 ![Game screenshot with debug panel](game_screenshot_with_debug.png)
 
-### Final Winning Game Screenshot
+### Buggy Winning Game Screenshot With Incorrect Attempts Display
 
 ![Fixed game screenshot](game_screenshot.png)
 
