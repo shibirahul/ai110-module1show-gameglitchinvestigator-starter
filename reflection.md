@@ -58,3 +58,9 @@ Next time, I would verify each AI suggestion earlier instead of assuming it was 
 
 - In one or two sentences, describe how this project changed the way you think about AI generated code.  
 This project showed me that AI-generated code can be helpful, but it still needs careful review and testing. I now see AI as a useful assistant, not something I should trust without checking.
+
+---
+
+## 6. AI Model Comparison
+
+I compared Claude Sonnet 4.6 and ChatGPT 5.4 on one of the logic bugs around the guessing flow and session behavior. Claude's suggestions were a little stronger when I wanted a cleaner code rewrite, especially when separating UI and logic. ChatGPT was better at giving a step-by-step explanation of why the bug happened in the first place, which helped when I was reasoning about reruns and session state. If I had to pick one for implementation, I would choose Claude first, but if I wanted the clearer explanation for learning, I would choose ChatGPT.

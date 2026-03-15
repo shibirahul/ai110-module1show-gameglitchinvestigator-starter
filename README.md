@@ -45,7 +45,7 @@ The purpose of this project is to debug and repair a broken Streamlit number gue
 - Fixed the reversed high/low hint bug so feedback now matches the guess outcome correctly.
 - Reworked the new game flow so `secret`, `attempts`, `score`, `status`, and `history` all reset together.
 - Corrected attempt counting and updated the UI text so the displayed range matches the selected difficulty.
-- Added automated tests for win/lose logic, hint direction, and decimal input validation.
+- Added automated tests for win/lose logic, hint direction, decimal input validation, out-of-range values, and high-score persistence.
 
 ## ✅ Verification
 
@@ -58,25 +58,47 @@ I verified the repairs in two ways:
 
 ```text
 $ .venv/bin/python -m pytest -q
-.....                                                                    [100%]
-5 passed in 0.01s
+............                                                             [100%]
+12 passed in 0.02s
 ```
+
+### Pytest Evidence
+
+![Pytest results](pytest_results.png)
 
 ### Manual App Check
 
-I also launched the app with Streamlit and confirmed that it started successfully, accepted guesses, and reset properly when starting a new game.
+I launched the app with Streamlit and confirmed that it started successfully, accepted guesses, and reset properly when starting a new game.
 
 ## 📸 Demo
 
-### App Screenshot
+### Winning Game Screenshot
 
 ![Fixed game screenshot](game_screenshot.png)
 
 ### Notes
 
-- The screenshot above was captured locally from the repaired Streamlit app and committed into the repository.
-- Pytest verification is included in the README as terminal output under the verification section.
+- The screenshot above shows the repaired game reaching a successful winning state.
+- Pytest verification is included both as terminal output and as an image artifact in this repository.
 
 ## 🚀 Stretch Features
 
-- No additional stretch feature was implemented beyond the debugging, refactor, testing, and documentation work.
+### Challenge 1: Advanced Edge-Case Testing
+
+I expanded the test suite from a few basic checks to a broader set of edge cases. The new tests cover decimal input, negative numbers, extremely large values, temperature labels, guess-history formatting, and saved high score behavior. The final result is a 12-test suite that exercises both bug fixes and extension logic.
+
+### Challenge 2: Feature Expansion via Agent Mode
+
+I added a high-score tracker that saves the best score to `high_score.json`, plus a guess-history view that records each guess, its outcome, distance from the secret, and a hot/cold label. The AI contribution is documented directly in the code near the session summary feature, where the UI table was added after AI-assisted planning and then refined manually.
+
+### Challenge 3: Professional Documentation and Linting
+
+Every function in `logic_utils.py` now has a real docstring that explains its purpose and return behavior. I also cleaned up the module structure and naming so the code is easier to read and follows normal Python style conventions more closely. I verified the updated files still parse cleanly with `python -m py_compile`.
+
+### Challenge 4: Enhanced Game UI
+
+The app now has stronger player feedback with color-coded result cards, hot/cold labels, a score panel, a high-score metric, and a session summary table. These changes improve the player experience without changing the core guessing-game rules. The README demo image shows the repaired game in a winning state, and the current code includes the expanded UI elements.
+
+### Challenge 5: AI Model Comparison
+
+I compared the way different AI tools helped with the debugging process in the reflection. The short version is that both models were helpful, but one was stronger for readable code changes while the other was stronger at explaining why the bug happened. The full comparison is documented at the bottom of `reflection.md`.
