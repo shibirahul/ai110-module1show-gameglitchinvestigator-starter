@@ -68,8 +68,14 @@ I also launched the app with Streamlit and confirmed that it started successfull
 
 ## 📸 Demo
 
-- Fixed winning game screenshot: add your screenshot here before final submission if your instructor requires an image artifact.
-- Optional pytest screenshot: if Challenge 1 requires a screenshot specifically, capture the passing terminal output and add it here.
+### App Screenshot
+
+![Fixed game screenshot](game_screenshot.png)
+
+### Notes
+
+- The screenshot above was captured locally from the repaired Streamlit app and committed into the repository.
+- Pytest verification is included in the README as terminal output under the verification section.
 
 ## 🚀 Stretch Features
 
