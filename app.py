@@ -136,18 +136,6 @@ with col2:
 with col3:
     show_hint = st.checkbox("Show hint", value=True)
 
-if new_game:
-    reset_game(low, high)
-    st.success("New game started.")
-    st.rerun()
-
-if st.session_state.status != "playing":
-    if st.session_state.status == "won":
-        st.success("You already won. Start a new game to play again.")
-    else:
-        st.error("Game over. Start a new game to try again.")
-    st.stop()
-
 if submit:
     ok, guess_int, err = parse_guess(raw_guess)
 
@@ -198,6 +186,19 @@ if submit:
                     f"The secret was {st.session_state.secret}. "
                     f"Score: {st.session_state.score}"
                 )
+            st.rerun()
+
+if new_game:
+    reset_game(low, high)
+    st.success("New game started.")
+    st.rerun()
+
+if st.session_state.status != "playing":
+    if st.session_state.status == "won":
+        st.success("You already won. Start a new game to play again.")
+    else:
+        st.error("Game over. Start a new game to try again.")
+    st.stop()
 
 st.divider()
 st.caption("Built by an AI that claims this code is production-ready.")
