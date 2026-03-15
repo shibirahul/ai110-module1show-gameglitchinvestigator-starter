@@ -111,13 +111,6 @@ with status_col:
     st.metric("Attempts Used", st.session_state.attempts)
     st.metric("Current Score", st.session_state.score)
 
-with st.expander("Developer Debug Info"):
-    st.write("Secret:", st.session_state.secret)
-    st.write("Attempts:", st.session_state.attempts)
-    st.write("Score:", st.session_state.score)
-    st.write("Difficulty:", difficulty)
-    st.write("History:", st.session_state.history)
-
 raw_guess = st.text_input(
     "Enter your guess:",
     key="guess_input",

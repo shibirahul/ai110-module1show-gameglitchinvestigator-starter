@@ -78,6 +78,8 @@ I launched the app with Streamlit and confirmed that it started successfully, ac
 
 ### Notes
 
+- An earlier version of the app exposed the secret number through the `Developer Debug Info` panel, which made the game trivial to win.
+- I removed that debug panel from the final version and then captured a new screenshot so the README reflects the real player experience.
 - The screenshot above shows the repaired game reaching a successful winning state.
 - Pytest verification is included both as terminal output and as an image artifact in this repository.
 
