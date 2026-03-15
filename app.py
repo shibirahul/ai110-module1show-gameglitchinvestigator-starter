@@ -164,7 +164,6 @@ if submit:
             history_entry = build_history_entry(
                 guess=guess_int,
                 outcome=outcome,
-                secret=st.session_state.secret,
             )
             st.session_state.history.append(history_entry)
             st.session_state.last_feedback = (outcome, message, guess_int)

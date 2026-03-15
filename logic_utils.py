@@ -97,13 +97,11 @@ def get_temperature_label(guess: int, secret: int) -> str:
     return "🧊 Cold"
 
 
-def build_history_entry(guess: int, outcome: str, secret: int) -> dict[str, str | int]:
-    """Create a compact record for the guess history sidebar and summary table."""
+def build_history_entry(guess: int, outcome: str) -> dict[str, str | int]:
+    """Create a compact record for the player-facing guess history."""
     return {
         "Guess": guess,
         "Outcome": outcome,
-        "Distance": abs(secret - guess),
-        "Heat": get_temperature_label(guess, secret),
     }
 
 
@@ -121,16 +119,22 @@ def load_high_score(file_path: Path = HIGH_SCORE_FILE) -> int:
     return score if isinstance(score, int) else 0
 
 
-def save_high_score(score: int, file_path: Path = HIGH_SCORE_FILE) -> None:
-    """Persist the latest high score to disk as JSON."""
+def save_high_score(score: int, file_path: Path = HIGH_SCORE_FILE) -> bool:
+    """Persist the latest high score to disk as JSON when the write succeeds."""
     payload = {"high_score": score}
-    file_path.write_text(json.dumps(payload, indent=2))
+    try:
+        file_path.write_text(json.dumps(payload, indent=2))
+        return True
+    except OSError:
+        # Ignore persistence errors so a winning game never crashes on file I/O.
+        return False
 
 
 def update_high_score(current_score: int, file_path: Path = HIGH_SCORE_FILE) -> int:
     """Save and return a new high score when the current score beats it."""
     best_score = load_high_score(file_path)
     if current_score > best_score:
-        save_high_score(current_score, file_path)
-        return current_score
+        if save_high_score(current_score, file_path):
+            return current_score
+        return best_score
     return best_score

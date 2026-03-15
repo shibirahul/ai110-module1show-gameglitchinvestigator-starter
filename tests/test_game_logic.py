@@ -67,12 +67,10 @@ def test_temperature_label_reports_very_hot_for_close_guess():
 
 
 def test_build_history_entry_captures_distance_and_heat():
-    history_entry = build_history_entry(45, "Too Low", 50)
+    history_entry = build_history_entry(45, "Too Low")
     assert history_entry == {
         "Guess": 45,
         "Outcome": "Too Low",
-        "Distance": 5,
-        "Heat": "🌡️ Warm",
     }
 
 
@@ -89,3 +87,15 @@ def test_update_high_score_does_not_overwrite_better_score(tmp_path: Path):
     best_score = update_high_score(25, file_path=high_score_file)
     assert best_score == 60
     assert load_high_score(high_score_file) == 60
+
+
+def test_update_high_score_handles_write_failure(monkeypatch, tmp_path: Path):
+    high_score_file = tmp_path / "high_score.json"
+
+    def fail_write(self, _: str):
+        raise OSError("disk is read-only")
+
+    monkeypatch.setattr(Path, "write_text", fail_write)
+    best_score = update_high_score(70, file_path=high_score_file)
+    assert best_score == 0
+    assert load_high_score(high_score_file) == 0
