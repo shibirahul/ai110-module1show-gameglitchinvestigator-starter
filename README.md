@@ -58,8 +58,8 @@ I verified the repairs in two ways:
 
 ```text
 $ .venv/bin/python -m pytest -q
-............                                                             [100%]
-12 passed in 0.02s
+.............                                                            [100%]
+13 passed in 0.01s
 ```
 
 ### Pytest Evidence
@@ -80,18 +80,22 @@ I launched the app with Streamlit and confirmed that it started successfully, ac
 
 ![Fixed game screenshot](game_screenshot.png)
 
+### Third And Final Screenshot
+
+![Final polished game screenshot](game_screenshot_final.png)
+
 ### Notes
 
 - An earlier version of the app exposed the secret number through the `Developer Debug Info` panel, which made the game trivial to win.
 - I kept the earlier screenshot for comparison and then removed the debug panel from the final version.
-- The final screenshot shows the repaired game reaching a successful winning state without revealing the secret number.
+- The final two screenshots show the repaired game after removing the secret-revealing debug panel and cleaning up the player-facing UI.
 - Pytest verification is included both as terminal output and as an image artifact in this repository.
 
 ## 🚀 Stretch Features
 
 ### Challenge 1: Advanced Edge-Case Testing
 
-I expanded the test suite from a few basic checks to a broader set of edge cases. The new tests cover decimal input, negative numbers, extremely large values, temperature labels, guess-history formatting, and saved high score behavior. The final result is a 12-test suite that exercises both bug fixes and extension logic.
+I expanded the test suite from a few basic checks to a broader set of edge cases. The new tests cover decimal input, negative numbers, extremely large values, temperature labels, guess-history formatting, and saved high score behavior. The final result is a 13-test suite that exercises both bug fixes and extension logic.
 
 ### Challenge 2: Feature Expansion via Agent Mode
 
